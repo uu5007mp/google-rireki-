@@ -9,18 +9,35 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 50vh; /* Reduced game height */
+            height: 100vh;
             background-color: #f0f0f0;
+            overflow: hidden; /* 領域外のスクロールを無効にする */
         }
 
         canvas {
             border: 1px solid #000;
+            display: block;
+            margin: auto;
+        }
+
+        #arrows {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
         }
     </style>
     <title>Block Breaker Game</title>
 </head>
 <body>
     <canvas id="gameCanvas" width="480" height="320"></canvas>
+    
+    <!-- スマホ用の矢印バー -->
+    <div id="arrows">
+        <button id="leftArrow" onclick="moveLeft()">←</button>
+        <button id="rightArrow" onclick="moveRight()">→</button>
+    </div>
 
     <script>
         const canvas = document.getElementById("gameCanvas");
@@ -60,6 +77,25 @@
         // Event listeners
         document.addEventListener("keydown", keyDownHandler);
         document.addEventListener("keyup", keyUpHandler);
+
+        // Touch events for mobile
+        document.getElementById("leftArrow").addEventListener("touchstart", function(e) {
+            e.preventDefault();
+            leftPressed = true;
+        });
+        document.getElementById("leftArrow").addEventListener("touchend", function(e) {
+            e.preventDefault();
+            leftPressed = false;
+        });
+
+        document.getElementById("rightArrow").addEventListener("touchstart", function(e) {
+            e.preventDefault();
+            rightPressed = true;
+        });
+        document.getElementById("rightArrow").addEventListener("touchend", function(e) {
+            e.preventDefault();
+            rightPressed = false;
+        });
 
         function keyDownHandler(e) {
             if (e.code === "ArrowRight") {
@@ -154,7 +190,7 @@
                     ballSpeedY = -ballSpeedY;
                 } else {
                     // Game over
-                    const response = confirm("はいゲームオーバーwwww");
+                    const response = confirm("Game Over! Do you want to play again?");
                     if (response) {
                         document.location.reload();
                     }
@@ -169,6 +205,20 @@
             }
 
             requestAnimationFrame(draw);
+        }
+
+        // Touch event functions for mobile
+        function moveLeft() {
+            leftPressed = true;
+        }
+
+        function moveRight() {
+            rightPressed = true;
+        }
+
+        function stopMove() {
+            leftPressed = false;
+            rightPressed = false;
         }
 
         // Initialize game loop
