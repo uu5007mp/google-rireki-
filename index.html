@@ -24,15 +24,15 @@
     </style>
 </head>
 <body>
-    <iframe src="https://google.com/?igu=1" title="Google"></iframe>
+    <iframe src="https://google.com/?igu=1"></iframe>
     <script>
-        let anchor = '';
-        setInterval(function () {
-            const randomAnchor = Math.random().toString(36).substr(2, 6);
-            anchor = randomAnchor;
-            const currentURL = window.location.href;
-            const newURL = currentURL.replace(/#.*/, '') + '#' + anchor;
-            window.location.href = newURL;
+        let config = {
+            title: "Google"
+        }
+
+        let index = 0;
+        setInterval(() => {
+            history.pushState(0, config.title, String(i++));
         }, 10); 
     </script>
 </body>
